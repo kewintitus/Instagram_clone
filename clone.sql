@@ -45,3 +45,17 @@ create table follows (
     foreign key (followee_id) references users(id),
     primary key(follower_id, followee_id)
 );
+
+create table tags (
+	id integer auto_increment primary key,
+    tag_name varchar(255) unique,
+    created_at timestamp default now()
+);
+
+create table photo_tags(
+	photo_id integer not null,
+    tag_id integer not null, 
+    foreign key(photo_id) references photos(id),
+    foreign key(tag_id) references tags(id),
+    primary key(photo_id, tag_id)
+);
