@@ -59,3 +59,5 @@ create table photo_tags(
     foreign key(tag_id) references tags(id),
     primary key(photo_id, tag_id)
 );
+
+
