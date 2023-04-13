@@ -21,3 +21,27 @@ FROM
     users ON users.id = photos.user_id
 WHERE
     image_url IS NULL;
+    
+    
+    
+    
+-- Query to get most liked photo
+
+-- SELECT 
+--     user_id, username, COUNT(*) AS photo_count
+-- FROM
+--     photos
+--         JOIN
+--     users ON users.id = user_id
+-- GROUP BY user_id
+-- ORDER BY photo_count DESC limit 1;
+
+SELECT 
+    username,photo_id, count(*) as like_count
+FROM
+    likes
+    
+        JOIN
+    photos on photos.id = photo_id
+    join users on users.id = photos.user_id
+    group by photos.id order by like_count desc;
