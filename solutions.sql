@@ -25,23 +25,55 @@ WHERE
     
     
     
--- Query to get most liked photo
-
--- SELECT 
---     user_id, username, COUNT(*) AS photo_count
--- FROM
---     photos
---         JOIN
---     users ON users.id = user_id
--- GROUP BY user_id
--- ORDER BY photo_count DESC limit 1;
+-- Query to get most liked photo with user details
 
 SELECT 
-    username,photo_id, count(*) as like_count
+    username, photo_id, COUNT(*) AS like_count
 FROM
     likes
-    
         JOIN
-    photos on photos.id = photo_id
-    join users on users.id = photos.user_id
-    group by photos.id order by like_count desc;
+    photos ON photos.id = photo_id
+        JOIN
+    users ON users.id = photos.user_id
+GROUP BY photos.id
+ORDER BY like_count DESC limit 1;
+
+-- Calculate avg no of photos per user 
+
+SELECT 
+    (SELECT 
+            COUNT(*)
+        FROM
+            photos) / (SELECT 
+            COUNT(*)
+        FROM
+            users);
+            
+-- 5 most commonly used hashtags
+
+SELECT 
+    tag_id, tag_name, COUNT(*) AS tag_count
+FROM
+    photo_tags
+        JOIN
+    tags ON tags.id = tag_id
+GROUP BY tag_id
+ORDER BY tag_count DESC limit 5;
+
+-- finding bot user acccounts - users who  have liked every single post
+select * from users;
+
+ SELECT 
+    likes.user_id, username, COUNT(*) AS like_count
+FROM
+    likes
+        JOIN
+    users ON users.id = likes.user_id
+        JOIN
+    photos ON photos.id = likes.photo_id
+GROUP BY likes.user_id
+HAVING like_count = (SELECT 
+        COUNT(*)
+    FROM
+        photos);
+	
